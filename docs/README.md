@@ -19,6 +19,7 @@
 | [DEPLOY.md](DEPLOY.md) | 部署引导（给下一台电脑的 AI / 运维） |
 | [handover.md](handover.md) | **交接指南**：新机器从零到编译/部署/出 deb |
 | [deb-packaging.md](deb-packaging.md) | DEB 打包：两个包、/opt 布局、构建与校验 |
+| [dependencies.md](dependencies.md) | **运行依赖清单**：apt 自动装 / 随包内置 / 运行时下载 |
 | [known-issues.md](known-issues.md) | **已知问题与修复**：GLIBC、worker 路径、代理冲突、fake-IP |
 | [changes-vs-main.md](changes-vs-main.md) | 相对 main 主线新增内容清单 |
 | [archive/deployment-20261018.md](archive/deployment-20261018.md) | 当前 Pi 的部署与维护细节 |

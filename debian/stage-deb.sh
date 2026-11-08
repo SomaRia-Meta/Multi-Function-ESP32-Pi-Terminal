@@ -62,6 +62,29 @@ find "$PKG$PREFIX/qt/lib" -maxdepth 1 \( -name 'libQt6Quick3D*' -o -name 'libQt6
        -o -name 'libQt6Help*' -o -name 'libQt6LanguageServer*' -o -name 'libQt6UiTools*' \
        -o -name 'libQt6Test*' -o -name 'libQt6QuickTest*' \) -delete 2>/dev/null || true
 
+# 3.55) 网易云 API 的 npm 依赖不在 Debian 源里，必须随包携带
+MUSIC_API="$ROOT/pi_terminal/music_api"
+MUSIC_DEST="$PKG$PREFIX/libexec/orange-pi-terminal/music-api"
+if [ ! -d "$MUSIC_DEST/node_modules" ]; then
+    if [ -d "$MUSIC_API/node_modules" ]; then
+        install -d "$MUSIC_DEST"
+        cp -a "$MUSIC_API/node_modules" "$MUSIC_DEST/"
+    else
+        echo "错误: music_api/node_modules 缺失；先运行 build_scripts/check_deps.sh（会调 install-music-api.sh）" >&2
+        exit 1
+    fi
+fi
+
+# 3.57) 精简 npm 包里的开发文件（lintian 会判 eslint/npmignore 为错误）
+NM="$PKG$PREFIX/libexec/orange-pi-terminal/music-api/node_modules"
+if [ -d "$NM" ]; then
+    find "$NM" \( -name '.eslintrc*' -o -name 'eslint.config.*' -o -name '.eslintignore' \
+        -o -name '.npmignore' -o -name '.gitignore' -o -name '.travis.yml' \) -delete 2>/dev/null || true
+    # API 的网页文档/导入页终端不用；含 bootstrap/adsense，去掉可过 privacy 检查
+    rm -rf "$NM/@neteaseapireborn/api/public/docs" \
+           "$NM/@neteaseapireborn/api/public/playlist_import.html" 2>/dev/null || true
+fi
+
 # 3.6) 仓库内置的开发依赖（SQLCipher 不在 Debian 主源，必须随包自带）
 if [ "$MULTIARCH" = "x86_64-linux-gnu" ] && [ -d "$ROOT/third_party/deps/lib/x86_64-linux-gnu" ]; then
     for lib in "$ROOT"/third_party/deps/lib/x86_64-linux-gnu/libsqlcipher*.so* \

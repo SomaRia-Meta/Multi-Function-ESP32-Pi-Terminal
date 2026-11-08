@@ -110,4 +110,44 @@ if [ "$missing" -eq 0 ]; then
 else
     echo "还有缺失项，按上面的提示处理后再编译。"
 fi
+
+echo "== 4. 运行时依赖（目标机 / 打包机都要有） =="
+have_pkg() { dpkg -s "$1" >/dev/null 2>&1; }
+have_cmd() { command -v "$1" >/dev/null 2>&1; }
+
+# 视频/电视（libvlc 需要插件，只有 libvlc5 会黑屏）
+if have_cmd cvlc || have_cmd vlc || [ -d /usr/lib/x86_64-linux-gnu/vlc/plugins ] || [ -d /usr/lib/aarch64-linux-gnu/vlc/plugins ]; then
+    say_ok "VLC 插件（视频/电视）"
+else
+    say_miss "VLC 插件：sudo apt install -y vlc-plugin-base   # 只有 libvlc5 会黑屏"
+fi
+
+# 桌宠转换器：java + javac 都要
+if have_cmd java && have_cmd javac; then
+    say_ok "JDK（桌宠转换器）"
+else
+    say_miss "JDK 17：sudo apt install -y openjdk-17-jdk-headless   # 缺它桌宠无法下载/切换模型"
+fi
+
+# 本地音乐元数据/封面
+if have_cmd ffprobe && have_cmd ffmpeg; then
+    say_ok "ffmpeg/ffprobe（音乐元数据）"
+else
+    say_miss "ffmpeg：sudo apt install -y ffmpeg"
+fi
+
+# 网易云 API 的 npm 依赖（不在 Debian 源，必须提前装好再打包）
+if [ -d "$ROOT/pi_terminal/music_api/node_modules/@neteaseapireborn" ]; then
+    say_ok "music_api node_modules（在线音乐 API）"
+else
+    say_miss "music_api node_modules：bash pi_terminal/scripts/install-music-api.sh（打包前必须）"
+fi
+
+# Python 图像依赖（桌宠图集）
+if python3 -c 'import PIL' >/dev/null 2>&1; then
+    say_ok "python3 PIL（桌宠图集）"
+else
+    say_miss "python3-pil：sudo apt install -y python3-pil"
+fi
+
 exit "$missing"
