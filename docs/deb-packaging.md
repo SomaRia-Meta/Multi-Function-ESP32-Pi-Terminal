@@ -7,6 +7,17 @@
 | `orange-pi-terminal` | 运行时：主程序、`libterminal_*`、`network_proxy`、`kdf_worker`、file-daemon、flite、模块 worker/helper、语音与图标资源、**自带 Qt 6.5.3 运行时**、systemd 单元、polkit、desktop | 目标机 |
 | `orange-pi-terminal-dev` | `pi_module_api.h`、`IModulePlugin.h`、`OrangePiModuleSDKConfig.cmake`、`libpi_module_sdk` | 模块开发者 |
 
+## 验证状态
+
+## 验证状态
+
+| 架构 | 状态 | 说明 |
+|---|---|---|
+| amd64 | **已实机验证** | 2026-11-08/09，Ubuntu 24.04：安装、启动、VLC 解码、桌宠下载+转换、网易云 API 搜索/取流全部通过 |
+| arm64 | **未在硬件验证** | 交叉构建，配方与 amd64 相同；依赖声明与内置内容一致，但未在树莓派上安装/运行，发布前需实机验证 |
+
+包内 `/usr/share/doc/orange-pi-terminal/BUILD-STATUS.txt` 会写明该包属于哪种状态。
+
 ## 安装布局
 
 ```text

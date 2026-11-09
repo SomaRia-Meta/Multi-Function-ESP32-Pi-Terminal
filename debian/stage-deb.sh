@@ -151,6 +151,31 @@ fi
 install -d "$PKG/usr/share/lintian/overrides"
 install -m644 "$ROOT/debian/orange-pi-terminal.lintian-overrides" "$PKG/usr/share/lintian/overrides/orange-pi-terminal"
 
+# 5.9) 构建状态说明：amd64 已实机验证，arm64 未在硬件上验证
+DOCDIR="$PKG/usr/share/doc/orange-pi-terminal"
+install -d "$DOCDIR"
+if [ "$MULTIARCH" = "x86_64-linux-gnu" ]; then
+    cat > "$DOCDIR/BUILD-STATUS.txt" <<'EOF'
+Build status: TESTED
+Architecture: amd64
+Validated: 2026-11-08/09 on Ubuntu 24.04 (glibc 2.39):
+  - install / start / onboarding
+  - VLC video (cvlc decode test + plugins present)
+  - Arkpets catalog + full model download & conversion (JDK 17)
+  - NetEase music API (bundled node_modules) search + song/url
+EOF
+else
+    cat > "$DOCDIR/BUILD-STATUS.txt" <<'EOF'
+Build status: UNTESTED ON HARDWARE
+Architecture: arm64
+This package was cross-built with the same recipes as the validated amd64 build,
+but has NOT been installed or exercised on a Raspberry Pi.
+Dependencies are declared in debian/control (apt auto-installs them) and the
+NetEase node_modules / Qt runtime are bundled the same way as amd64.
+Expect the same feature set; verify on hardware before release.
+EOF
+fi
+
 # 6) 清掉空目录，避免 dh 报 uninstalled
 find "$PKG$PREFIX" -type d -empty -delete 2>/dev/null || true
 echo "stage 完成：$(du -sh "$PKG" | cut -f1) 运行时 / $(du -sh "$DEV" | cut -f1) dev"

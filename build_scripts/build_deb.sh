@@ -20,4 +20,8 @@ for p in "$ORPI_SYSROOT" "$ORPI_QT_PREFIX" "$ORPI_HOST_QT" "$ORPI_FLITE_ROOT"; d
 done
 
 cd "$ROOT"
+case " $* " in
+  *" -aarm64 "*|*" --arch arm64 "*)
+    echo "警告: 正在交叉构建 arm64 包。该包未在树莓派硬件上验证（见包内 BUILD-STATUS.txt）。" >&2 ;;
+esac
 exec dpkg-buildpackage -b -aarm64 -us -uc -d "$@"

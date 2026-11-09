@@ -10,9 +10,9 @@ GitHub 单文件上限 100 MB，deb 以 **90 MB 分片**提交；用 `join.sh` �
 
 | 包 | 架构 | 大小 | 分片 | 说明 |
 |---|---|---|---|---|
-| `orange-pi-terminal` | arm64 | 242 MB | part00–02 | Pi 3B 运行时（自带 Qt 6.5.3） |
-| `orange-pi-terminal-dev` | arm64 | 5 KB | part00 | 模块 SDK 头文件/CMake |
-| `orange-pi-terminal` | amd64 | 272 MB | part00–03 | 开发机运行时 |
+| `orange-pi-terminal` | arm64 | 253 MB | part00–02 | Pi 3B 运行时（自带 Qt 6.5.3）· **未在硬件验证** |
+| `orange-pi-terminal-dev` | arm64 | 5 KB | part00 | 模块 SDK 头文件/CMake · 未在硬件验证 |
+| `orange-pi-terminal` | amd64 | 285 MB | part00–03 | 开发机运行时 · **已实机验证** |
 | `orange-pi-terminal-dev` | amd64 | 5 KB | part00 | 同上 |
 
 ## 安装
